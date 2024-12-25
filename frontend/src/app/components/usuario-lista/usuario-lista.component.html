@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Lista de Usuarios</h2>
+        <button routerLink="/usuarios/crear" class="btn btn-primary">
+            Crear Nuevo Usuario
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let usuario of usuarios">
+                    <td>{{usuario.id}}</td>
+                    <td>{{usuario.nombre}}</td>
+                    <td>{{usuario.email}}</td>
+                    <td style="display: flex; gap: 8px;">
+                        <button *ngIf="usuario.id !== undefined" (click)="editarUsuario(usuario.id)" class="btn btn-warning">
+                            Editar
+                        </button>
+                        <button (click)="usuario.id !== undefined && eliminarUsuario(usuario.id)" class="btn btn-danger">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
