@@ -1,0 +1,55 @@
+<!-- src/app/components/index/index.component.html -->
+<div class="container">
+    <section class="info-section">
+      <h1>Bienvenido al Sistema CRUD</h1>
+      <p>Sistema de gestión para operaciones CRUD utilizando:</p>
+      <ul>
+        <li>Frontend: Angular</li> 
+        <li>Backend: Node.js + Express</li>
+        <li>Base de datos: MySQL</li>
+      </ul>
+    </section>
+  
+    <section class="login-section">
+      <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+              type="email"
+              id="email"  
+              formControlName="email"
+              class="form-control"
+              placeholder="Ingrese su email"
+            >
+            <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" 
+                 class="error-message">
+              Email válido es requerido
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              formControlName="password" 
+              class="form-control"
+              placeholder="Ingrese su contraseña"
+            >
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                 class="error-message">
+              La contraseña es requerida
+            </div>
+          </div>
+  
+          <button type="submit" 
+                  [disabled]="loginForm.invalid"
+                  class="btn btn-primary">
+            Ingresar
+          </button>
+        </form>
+      </div>
+    </section>
+  </div>
