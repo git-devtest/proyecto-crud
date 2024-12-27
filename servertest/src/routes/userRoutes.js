@@ -7,6 +7,21 @@ const userModel = require('../models/userModel');
 userModel.createTable();
 
 // Rutas para usuarios
+
+// Ruta de login
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const usuario = await userModel.validateCredentials(email, password);
+        if (!usuario) {
+            return res.status(401).json({ message: 'Credenciales inválidas' });
+        }
+        res.json(usuario);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Obtener todos los usuarios
 router.get('/', async (req, res) => {
     try {

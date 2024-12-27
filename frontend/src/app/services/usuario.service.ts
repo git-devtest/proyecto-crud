@@ -12,6 +12,10 @@ export class UsuarioService {
 
     constructor(private http: HttpClient) { }
 
+    login(credentials: { email: string, password: string }): Observable<any> {
+        return this.http.post('http://localhost:3000/api/login', credentials);
+    }
+    
     getUsuarios(): Observable<Usuario[]> {
         return this.http.get<Usuario[]>(this.apiUrl);
     }

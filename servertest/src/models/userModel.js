@@ -1,5 +1,6 @@
 // src/models/userModel.js
 const { pool } = require('../config/database');
+const bcrypt = require('bcryptjs');
 
 const userModel = {
     // Crear tabla si no existe
@@ -11,6 +12,7 @@ const userModel = {
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     nombre VARCHAR(100) NOT NULL,
                     email VARCHAR(100) UNIQUE NOT NULL,
+                    password VARCHAR(255) NOT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             `);
@@ -25,11 +27,33 @@ const userModel = {
     // Crear usuario
     async create(userData) {
         try {
+            const hashedPassword = await bcrypt.hash(userData.password, 10);
             const [result] = await pool.query(
-                'INSERT INTO usuarios (nombre, email) VALUES (?, ?)',
-                [userData.nombre, userData.email]
+                'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)',
+                [userData.nombre, userData.email, hashedPassword]
             );
             return { id: result.insertId, ...userData };
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    // Validar credenciales
+    async validateCredentials(email, password) {
+        try {
+            const [rows] = await pool.query('SELECT * FROM usuarios WHERE email = ?', [email]);
+            if (rows.length === 0) return null;
+            
+            const user = rows[0];
+            const isValid = await bcrypt.compare(password, user.password);
+            
+            if (!isValid) return null;
+            
+            return {
+                id: user.id,
+                nombre: user.nombre,
+                email: user.email
+            };
         } catch (error) {
             throw error;
         }
