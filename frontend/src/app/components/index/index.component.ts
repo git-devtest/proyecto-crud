@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-index',
@@ -16,7 +17,8 @@ export class IndexComponent {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private usuarioService: UsuarioService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -26,7 +28,18 @@ export class IndexComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      // Aquí iría la lógica de login
+      if (this.loginForm.valid) {
+        this.usuarioService.login(this.loginForm.value).subscribe({
+          next: (response) => {
+            console.log('Login exitoso', response);
+            this.router.navigate(['/usuarios']);
+          },
+          error: (error) => {
+            console.error('Error en login', error);
+            alert('Credenciales inválidas');
+          }
+        });
+      }
       
       console.log(this.loginForm.value);
     }

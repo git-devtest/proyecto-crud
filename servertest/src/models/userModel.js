@@ -41,20 +41,32 @@ const userModel = {
     // Validar credenciales
     async validateCredentials(email, password) {
         try {
+            console.log('Intentando validar credenciales para:', email); // Debug
             const [rows] = await pool.query('SELECT * FROM usuarios WHERE email = ?', [email]);
-            if (rows.length === 0) return null;
-            
+            console.log('Usuarios encontrados:', rows.length); // Debug
+
+            if (rows.length === 0) {
+                console.log('No se encontró usuario'); // Debug
+                return null;
+            }
             const user = rows[0];
+            console.log('Usuario encontrado:', user.email); // Debug
+
             const isValid = await bcrypt.compare(password, user.password);
+            console.log('Contraseña válida:', isValid); // Debug
             
-            if (!isValid) return null;
-            
+            if (!isValid) {
+                console.log('Contraseña incorrecta'); // Debug
+                return null;
+            }
+
             return {
                 id: user.id,
                 nombre: user.nombre,
                 email: user.email
             };
         } catch (error) {
+            console.error('Error en validateCredentials:', error); // Debug
             throw error;
         }
     },
