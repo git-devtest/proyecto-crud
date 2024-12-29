@@ -1,0 +1,18 @@
+<nav class="navbar">
+    <div class="navbar-brand">
+      <a routerLink="/usuarios">Mi Aplicación</a>
+      <button class="menu-toggle" (click)="toggleMenu()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+    
+    <div class="navbar-menu" [class.active]="isMenuOpen">
+      <ul class="nav-links">
+        <li><a routerLink="/usuarios" routerLinkActive="active">Usuarios</a></li>
+        <li class="user-info">Bienvenido, {{ userName }}</li>
+        <li><button class="logout-btn" (click)="logout()">Cerrar Sesión</button></li>
+      </ul>
+    </div>
+  </nav>
